@@ -1,45 +1,43 @@
-freqQuery()
-
-function freqQuery() {
-  var outputStack = []
-  var stuffInArrayCount = {}
+// Complete the freqQuery function below.
+function freqQuery(queries) {
+  var counts = {}
   var returnArray = []
-  for(let i = 0; i < input.length; i++) {
-    let command = input[i]
+  var itemWithCount = {}
+  for(let i = 0; i < queries.length; i++) {
+    let command = queries[i]
     if (command[0] === 1) {
-      outputStack.push(command[1])
-      if (stuffInArrayCount[command[1]] === undefined) {
-        stuffInArrayCount[command[1]] = 0
+      if (itemWithCount[command[1]] === undefined) {
+        itemWithCount[command[1]] = 1
+        if(counts[1]){
+          counts[1] = counts[1] + 1
+        } else {
+          counts[1] = 1
+        }
       } else  {
-        stuffInArrayCount[command[1]] = stuffInArrayCount[command[1]] + 1
+        counts[itemWithCount[command[1]]] = counts[itemWithCount[command[1]]] - 1
+        if(counts[itemWithCount[command[1]] + 1]){
+          counts[itemWithCount[command[1]] + 1] = counts[itemWithCount[command[1]] + 1] + 1
+        } else {
+          counts[itemWithCount[command[1]] + 1] = 1
+        }
+        itemWithCount[command[1]] = itemWithCount[command[1]] + 1
       }
     } else if (command[0] === 2) {
-      var index = outputStack.indexOf(command[1]);
-      if (index > -1) {
-        outputStack.splice(index, 1);
-        stuffInArrayCount[command[1]] = stuffInArrayCount[command[1]] - 1
-        if (stuffInArrayCount[command[1]] === 0) {
-          delete stuffInArrayCount[command[1]]
+      if (itemWithCount[command[1]] ) {
+        if(counts[itemWithCount[command[1]]]) {
+          counts[itemWithCount[command[1]]] = counts[itemWithCount[command[1]]] - 1
+          counts[itemWithCount[command[1] - 1]] = counts[itemWithCount[command[1] - 1]] + 1
         }
+        itemWithCount[command[1]] = itemWithCount[command[1]] - 1
       }
     } else if (command[0] === 3) {
-      let keys = Object.keys(stuffInArrayCount)
-      let printedKeys = false
-      if (!Object.values(stuffInArrayCount).filter(n => n).length) {
-        returnArray.push(0)
-        continue
-      }
-      for (let j = 0; j < keys.length; j++) {
-        if (stuffInArrayCount[keys[j]] === command[1]) {
-          returnArray.push(1)
-          printedKeys = true
-          break
-        }
-      }
-      if (!printedKeys) {
+      if (counts[command[1]] > 0) {
+        returnArray.push(1)
+      } else {
         returnArray.push(0)
       }
     }
   }
-  console.log(returnArray)
+  return returnArray
+
 }
